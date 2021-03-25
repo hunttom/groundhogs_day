@@ -1,0 +1,98 @@
+import click
+
+from groundhogs_day import aws_configure, aws_list_helper, aws_organizations, aws_s3
+
+"""
+ghd iam [--on --off] scope [--org --account]
+"""
+
+"""
+ghd guardduty [--on --off] scope [--org --account]
+"""
+
+"""
+ghd securityhub [--on --off] scope [--org --account]
+"""
+
+"""
+ghd config [--on --off] scope [--org --account]
+"""
+@click.group()
+@click.option('--profile', '-p',
+    default='default',
+    help='Enter profile to use',
+    type=str
+)
+@click.option('--scope', 
+    type=click.Choice(['organization', 'account'], case_sensitive=False))
+@click.pass_context
+def cli(ctx, profile, scope):
+    """
+    Main function for CLI
+    """
+    aws_profile = config_profile(profile=profile)
+    ctx.obj['profile'] = aws_profile
+    ctx.obj['scope'] = scope
+
+@cli.command()
+@click.pass_context
+def configure(ctx):
+    """ghd [--profile ] configure """
+    aws_profile = ctx.obj['profile']
+    aws_configure.configure_cli(profile=aws_profile)
+
+@cli.command()
+@click.argument(
+    'list',
+    type=click.Choice(['organization', 'accounts', 'org_admins'])
+    )
+@click.option('--output', 
+    type=click.Choice(['json', 'csv', 'table'], case_sensitive=False), default='table')
+@click.option('--export',
+    is_flag=True)
+@click.pass_context
+def list(ctx, list, output, export):
+    """ghd list [organization, accounts, org_admins] [--output <json,csv,table>] [--export <csv,json>]"""
+
+    account_list = aws_list_helper.organizations_list_accounts()
+
+    if list.lower() == 'organization':
+        # ghd list organization [--output <json,table>] --export (json)
+        aws_organizations.organization_information(account_list=account_list, output_format=output, export=export)
+    elif list.lower() == 'accounts':
+        # ghd list accounts [--output <csv,json,table>] --export (csv,json)
+        aws_organizations.account_information(data=account_list, output_format=output, export=export)
+    elif list.lower() == 'org_admins':
+        # ghd list accounts [--output <csv,json,table>] --export (csv,json)
+        aws_organizations.organization_admins(output_format=output, export=export)
+
+@cli.command()
+@click.option('--on/--off', default=False)
+@click.pass_context
+def s3account(ctx, on):
+    """ghd s3account [--on --off] scope [--org --account]"""
+    aws_profile = ctx.obj['profile']
+    config_data = aws_configure.read_profile(profile=aws_profile)
+    role = config_data['aws_iam_role']
+    if on:
+        aws_s3.enable_s3_account_block(role=role)
+    else:
+        aws_s3.disable_s3_account_block(role=role)
+
+
+def config_profile(profile):
+    if profile:
+        aws_profile = profile
+    else:
+        aws_profile = 'default'
+    return aws_profile
+
+
+
+def main():
+
+    cli(obj={})
+
+
+if __name__ == '__main__':
+    main()

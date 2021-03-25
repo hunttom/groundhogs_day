@@ -33,8 +33,9 @@ test: install
 # 	ghd list org_admins --output table
 # 	ghd list org_admins --output json
 # 	ghd list org_admins --output json --export
-	ghd s3account --off
-	ghd s3account --on
+# 	ghd s3account --off
+# 	ghd s3account --on
+# 	ghd s3account --on --target 123
 
 clean:
 	rm -rf $(VENV)

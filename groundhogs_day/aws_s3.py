@@ -6,13 +6,12 @@ from progress.bar import IncrementalBar
 from groundhogs_day import aws_list_helper, aws_creds_helper
 
 
-def enable_s3_account_block(role):
+def enable_s3_account_block(role, accounts_list):
     """
     Function to enable AWS S3 Account-Level block
     """
     print("\nEnabling AWS S3 Account Block")
     print("==============================")
-    accounts_list = aws_list_helper.organizations_list_accounts()
     enable_s3_account_level_blocks(role, accounts_list)
 
 
@@ -57,14 +56,13 @@ def enable_s3_account_level_blocks(role, accounts_list):
             print(f"- {failed_account}")
 
 
-def disable_s3_account_block(role):
+def disable_s3_account_block(role, accounts_list):
     """
     Function to disable AWS S3 Account-Level block
     """
     print("\nDisabling AWS S3 Account Block")
     print("==============================")
 
-    accounts_list = aws_list_helper.organizations_list_accounts()
     disable_s3_account_level_blocks(role, accounts_list)
 
 
@@ -102,27 +100,3 @@ def disable_s3_account_level_blocks(role, accounts_list):
         print("========================================================================")
         for failed_account in failed_accounts:
             print(f"- {failed_account}")
-
-def enable_account_s3_account_block(role, individual_account):
-    """
-    Function to enable AWS S3 Account-Level block in an account
-    """
-    # account_id = input("What account do you want to enable S3 Account Block in: ")
-    accounts_list = aws_list_helper.organizations_describe_account(individual_account)
-
-    print(f"Enabling AWS S3 Account Block in {individual_account}")
-    print("===================================================")
-
-    enable_s3_account_level_blocks(role, accounts_list)
-
-def disable_account_s3_account_block(role, individual_account):
-    """
-    Function to disable AWS S3 Account-Level block in an account
-    """
-    # account_id = input("What account do you want to disable S3 Account Block in: ")
-    accounts_list = aws_list_helper.organizations_describe_account(individual_account)
-
-    print(f"Disabling AWS S3 Account Block in {individual_account}")
-    print("===================================================")
-
-    disable_s3_account_level_blocks(role, accounts_list)

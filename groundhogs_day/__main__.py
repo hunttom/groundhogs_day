@@ -56,28 +56,33 @@ def list(ctx, list, output, export):
 
     account_list = aws_list_helper.organizations_list_accounts()
 
-    if list.lower() == 'organization':
+    if list == 'organization':
         # ghd list organization [--output <json,table>] --export (json)
         aws_organizations.organization_information(account_list=account_list, output_format=output, export=export)
-    elif list.lower() == 'accounts':
+    elif list == 'accounts':
         # ghd list accounts [--output <csv,json,table>] --export (csv,json)
         aws_organizations.account_information(data=account_list, output_format=output, export=export)
-    elif list.lower() == 'org_admins':
-        # ghd list accounts [--output <csv,json,table>] --export (csv,json)
+    elif list == 'org_admins':
+        # ghd list org_admins [--output <csv,json,table>] --export (json)
         aws_organizations.organization_admins(output_format=output, export=export)
 
 @cli.command()
-@click.option('--on/--off', default=False)
+@click.option('--on/--off', default=True)
+@click.option('--target', prompt='Account Id for S3 Account Settings', default=True)
 @click.pass_context
-def s3account(ctx, on):
-    """ghd s3account [--on --off] scope [--org --account]"""
+def s3account(ctx, on, target):
+    """ghd s3account [--on --off] --target <accountid>"""
     aws_profile = ctx.obj['profile']
     config_data = aws_configure.read_profile(profile=aws_profile)
     role = config_data['aws_iam_role']
-    if on:
-        aws_s3.enable_s3_account_block(role=role)
+    if target:
+        accounts_list = [{'Name': 'Target Account', 'AccountId': f'{target}', 'Email': 'example@mail.com'}]
     else:
-        aws_s3.disable_s3_account_block(role=role)
+        accounts_list = aws_list_helper.organizations_list_accounts()
+    if on:
+        aws_s3.enable_s3_account_block(role=role, accounts_list=accounts_list)
+    else:
+        aws_s3.disable_s3_account_block(role=role, accounts_list=accounts_list)
 
 
 def config_profile(profile):

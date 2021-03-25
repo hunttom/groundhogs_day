@@ -65,7 +65,7 @@ def list(ctx, list, output, export):
 
 @cli.command()
 @click.option('--on/--off', default=True)
-@click.option('--target', prompt='Account Id for S3 Account Settings', default=True)
+@click.option('--target', help='Account Id for S3 Account Settings')
 @click.pass_context
 def s3account(ctx, on, target):
     """ghd s3account [--on --off] --target <accountid>"""

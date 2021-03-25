@@ -142,6 +142,3 @@ cython_debug/
 
 # CSV File
 *.csv
-
-#Apple Files
-*.DS_Store

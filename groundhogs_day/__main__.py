@@ -23,16 +23,13 @@ ghd config [--on --off] scope [--org --account]
     help='Enter profile to use',
     type=str
 )
-@click.option('--scope', 
-    type=click.Choice(['organization', 'account'], case_sensitive=False))
 @click.pass_context
-def cli(ctx, profile, scope):
+def cli(ctx, profile):
     """
     Main function for CLI
     """
     aws_profile = config_profile(profile=profile)
     ctx.obj['profile'] = aws_profile
-    ctx.obj['scope'] = scope
 
 @cli.command()
 @click.pass_context

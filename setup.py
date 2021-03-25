@@ -17,7 +17,6 @@ setup(
         "configparser",
         "click",
         "tabulate"
-        # "simple_term_menu"
     ],
     setup_requires=[],
     tests_require=[],

@@ -37,6 +37,11 @@ test: install
 # 	ghd s3account --on
 # 	ghd s3account --on --target 123
 
+mirror: groundhogs_day
+	cp -r groundhogs_day/groundhogs_day ../github_groundhogs_day/
+	cp -r groundhogs_day/menus ../github_groundhogs_day/groundhogs_day/
+	cp -r Makefile ../github_groundhogs_day/
+
 clean:
 	rm -rf $(VENV)
 	find . -type f -name '*.pyc' -delete

@@ -13,7 +13,7 @@ A CLI Tool to automate standard tasks within an Amazon Web Services Organization
 ## Usage
 
 ### To Install:
-  Run the following: `pip install git+https://github.com/hunttom/groundhogs_day@main` to install
+  Run the following: `pip3 install git+https://github.com/hunttom/groundhogs_day@main` to install
 
 ### To Configure:
   Run the following: `ghd configure` to configure the default profile.

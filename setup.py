@@ -16,7 +16,8 @@ setup(
         "botocore",
         "configparser",
         "click",
-        "tabulate"
+        "tabulate",
+        "progress"
     ],
     setup_requires=[],
     tests_require=[],

@@ -1,6 +1,6 @@
 import click
 
-from groundhogs_day import aws_configure, aws_list_helper, aws_organizations, aws_s3
+from groundhogs_day import aws_configure, aws_list_helper, aws_organizations, aws_s3, aws_vpc
 
 """
 ghd iam [--on --off] scope [--org --account]
@@ -80,6 +80,17 @@ def s3account(ctx, on, target):
         aws_s3.enable_s3_account_block(role=role, accounts_list=accounts_list)
     else:
         aws_s3.disable_s3_account_block(role=role, accounts_list=accounts_list)
+
+
+@cli.command()
+@click.pass_context
+def vpcdelete(ctx):
+    """ghd vpcdelete"""
+    aws_profile = ctx.obj['profile']
+    config_data = aws_configure.read_profile(profile=aws_profile)
+    role = config_data['aws_iam_role']
+    accounts_list = aws_list_helper.organizations_list_accounts()
+    aws_vpc.delete_default_vpc(role=role, accounts_list=accounts_list)
 
 
 def config_profile(profile):

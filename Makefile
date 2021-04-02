@@ -36,6 +36,7 @@ test: install
 # 	ghd s3account --off
 # 	ghd s3account --on
 # 	ghd s3account --on --target 123
+	ghd vpcdelete
 
 mirror: groundhogs_day
 	cp -r groundhogs_day/groundhogs_day ../github_groundhogs_day/

@@ -50,6 +50,6 @@ Commands:
   configure  ghd [--profile ] configure
   list       ghd list [organization, accounts, org_admins] [--output <json|csv|table>]
   s3account  ghd s3account [--on --off] --target <accountid>
-  vpcdelete  ghd vpcdelete
+  vpcdelete  ghd vpcdelete --target <accountid>
 ```
 

@@ -84,12 +84,16 @@ def s3account(ctx, on, target):
 
 @cli.command()
 @click.pass_context
+@click.option('--target', help='Account Id for deleting default VPCs')
 def vpcdelete(ctx):
     """ghd vpcdelete"""
     aws_profile = ctx.obj['profile']
     config_data = aws_configure.read_profile(profile=aws_profile)
     role = config_data['aws_iam_role']
-    accounts_list = aws_list_helper.organizations_list_accounts()
+    if target:
+        accounts_list = [{'Name': 'Target Account', 'AccountId': f'{target}', 'Email': 'example@mail.com'}]
+    else:
+        accounts_list = aws_list_helper.organizations_list_accounts()
     aws_vpc.delete_default_vpc(role=role, accounts_list=accounts_list)
 
 
